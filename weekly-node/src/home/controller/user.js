@@ -1,4 +1,11 @@
+import { AuthenticationClient } from 'authing-js-sdk';
 const Base = require('./base');
+const authing = new AuthenticationClient({
+  appId: '638571c2c32b42b731183076',
+  appHost: 'https://opensource.authing.cn',
+  secret: '5c9aae81e3fba5367f415b9597fa0efe',
+  redirectUri: 'http://localhost:8362/user/callBack?',
+});
 module.exports = class extends Base {
   async loginAction() {
     let { usernum, password } = this.post();
@@ -34,6 +41,7 @@ module.exports = class extends Base {
       return this.fail('登录失败');
     }
   }
+
   async queryuserAction() {
     try {
       this.user = {
@@ -52,7 +60,15 @@ module.exports = class extends Base {
       return this.fail(e);
     }
   }
+
   async logoutAction() {
+    var url = authing.buildLogoutUrl({
+      redirectUri: 'http://localhost:8362/user/authingLogin',
+    });
+    // this.ctx.status = 302;
+    // this.ctx.redirect(url);
+    // console.log(url);
+    return this.success(url);
     try {
       //记录登出的记录
       let dateTime = new Date();
@@ -101,6 +117,7 @@ module.exports = class extends Base {
       return this.fail('修改失败');
     }
   }
+
   async registerAction() {
     let company_id = this.user.company_id || this.post('company_id');
     let company_name = this.user.company_name || this.post('company_name');
@@ -207,5 +224,32 @@ module.exports = class extends Base {
     } catch (e) {
       return this.fail(`删除失败${e}`);
     }
+  }
+
+  async callBackAction() {
+    console.log(`${this.ctx.query['code']}`);
+    var userToken = await authing.getAccessTokenByCode(this.ctx.query['code']);
+    var authinguser = await authing.getUserInfoByAccessToken(
+      userToken['access_token']
+    );
+    let user = await this.model('user')
+      .where({
+        usernum: authinguser.name,
+      })
+      .find();
+    await this.session('userInfo', user);
+    this.ctx.status = 302;
+    this.ctx.redirect('http://localhost:8082/weekly/dashBoard');
+    return this.success;
+    return this.success(`调用成功`);
+  }
+
+  async authingLoginAction() {
+    var url = authing.buildAuthorizeUrl({
+      scope: 'openid profile offline_access',
+    });
+    this.ctx.status = 302;
+    this.ctx.redirect(url);
+    return this.success;
   }
 };
