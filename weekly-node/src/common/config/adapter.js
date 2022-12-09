@@ -2,7 +2,7 @@ const redisCache = require('think-cache-redis');
 const nunjucks = require('think-view-nunjucks');
 const redisSession = require('think-session-redis');
 const mysql = require('think-model-mysql');
-const {Console, File, DateFile} = require('think-logger3');
+const { Console, File, DateFile } = require('think-logger3');
 const path = require('path');
 const isDev = think.env === 'development';
 
@@ -11,16 +11,16 @@ const isDev = think.env === 'development';
  * @type {Object}
  */
 exports.cache = {
-    type: 'redis',
-    common: {
-        timeout: 24 * 60 * 60 * 1000 // millisecond
-    },
-    redis: {
-        handle: redisCache,
-        host: '127.0.0.1',
-        port: 6379,
-        password: 'a123456'
-    }
+  type: 'redis',
+  common: {
+    timeout: 24 * 60 * 60 * 1000, // millisecond
+  },
+  redis: {
+    handle: redisCache,
+    host: '192.168.111.102',
+    port: 6379,
+    password: '88886666',
+  },
 };
 // exports.cache = {
 //   type: 'file',
@@ -44,19 +44,19 @@ exports.model = {
   common: {
     logConnect: true,
     logSql: true,
-    logger: msg => think.logger.info(msg)
+    logger: (msg) => think.logger.info(msg),
   },
   mysql: {
     handle: mysql,
     database: 'weekly',
-    prefix: 'week_',
+    prefix: '',
     encoding: 'utf8',
-    host: '127.0.0.1',
-    port: '3306',
+    host: '192.168.111.102',
+    port: '3307',
     user: 'root',
-    password: '123456',
-    dateStrings: true
-  }
+    password: '88886666',
+    dateStrings: true,
+  },
 };
 
 /**
@@ -64,20 +64,20 @@ exports.model = {
  * @type {Object}
  */
 exports.session = {
-    type: 'redis',
-    common: {
-        cookie: {
-            name: 'thinkjs',
-            keys: ['werwer', 'werwer'],
-            signed: true
-        }
+  type: 'redis',
+  common: {
+    cookie: {
+      name: 'thinkjs',
+      keys: ['werwer', 'werwer'],
+      signed: true,
     },
-    redis: {
-        handle: redisSession,
-        host: '127.0.0.1',
-        port: 6379,
-        password: 'a123456'
-    }
+  },
+  redis: {
+    handle: redisCache,
+    host: '192.168.111.102',
+    port: 6379,
+    password: '88886666',
+  },
 };
 
 /**
@@ -85,15 +85,15 @@ exports.session = {
  * @type {Object}
  */
 exports.view = {
-    type: 'nunjucks',
-    common: {
-        viewPath: path.join(think.ROOT_PATH, 'view'),
-        sep: '_',
-        extname: '.html'
-    },
-    nunjucks: {
-        handle: nunjucks
-    }
+  type: 'nunjucks',
+  common: {
+    viewPath: path.join(think.ROOT_PATH, 'view'),
+    sep: '_',
+    extname: '.html',
+  },
+  nunjucks: {
+    handle: nunjucks,
+  },
 };
 
 /**
@@ -101,23 +101,23 @@ exports.view = {
  * @type {Object}
  */
 exports.logger = {
-    type: isDev ? 'console' : 'dateFile',
-    console: {
-        handle: Console
-    },
-    file: {
-        handle: File,
-        backups: 10, // max chunk number
-        absolute: true,
-        maxLogSize: 50 * 1024, // 50M
-        filename: path.join(think.ROOT_PATH, 'logs/app.log')
-    },
-    dateFile: {
-        handle: DateFile,
-        level: 'ALL',
-        absolute: true,
-        pattern: '-yyyy-MM-dd',
-        alwaysIncludePattern: true,
-        filename: path.join(think.ROOT_PATH, 'logs/app.log')
-    }
+  type: isDev ? 'console' : 'dateFile',
+  console: {
+    handle: Console,
+  },
+  file: {
+    handle: File,
+    backups: 10, // max chunk number
+    absolute: true,
+    maxLogSize: 50 * 1024, // 50M
+    filename: path.join(think.ROOT_PATH, 'logs/app.log'),
+  },
+  dateFile: {
+    handle: DateFile,
+    level: 'ALL',
+    absolute: true,
+    pattern: '-yyyy-MM-dd',
+    alwaysIncludePattern: true,
+    filename: path.join(think.ROOT_PATH, 'logs/app.log'),
+  },
 };
