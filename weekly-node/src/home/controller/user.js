@@ -2,7 +2,7 @@ import { AuthenticationClient } from 'authing-js-sdk';
 const Base = require('./base');
 const authing = new AuthenticationClient({
   appId: '638571c2c32b42b731183076',
-  appHost: 'https://opensource.authing.cn',
+  appHost: 'https://sxw1n2ru4tzb7w2p.authing.cn',
   secret: '5c9aae81e3fba5367f415b9597fa0efe',
   redirectUri: 'http://localhost:8362/user/callBack?',
 });
@@ -63,7 +63,7 @@ module.exports = class extends Base {
 
   async logoutAction() {
     var url = authing.buildLogoutUrl({
-      redirectUri: 'http://localhost:8362/user/authingLogin',
+      redirectUri: 'https://authing.cn',
     });
     // this.ctx.status = 302;
     // this.ctx.redirect(url);
@@ -247,6 +247,7 @@ module.exports = class extends Base {
   async authingLoginAction() {
     var url = authing.buildAuthorizeUrl({
       scope: 'openid profile offline_access',
+      tenantId: '63918150b9636f665c244ab5',
     });
     this.ctx.status = 302;
     this.ctx.redirect(url);
