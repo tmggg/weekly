@@ -68,7 +68,6 @@ module.exports = class extends Base {
     // this.ctx.status = 302;
     // this.ctx.redirect(url);
     // console.log(url);
-    return this.success(url);
     try {
       //记录登出的记录
       let dateTime = new Date();
@@ -81,7 +80,7 @@ module.exports = class extends Base {
         password: this.user.password,
       });
       await this.session('userInfo', '');
-      return this.success('登出成功');
+      return this.success(url);
     } catch (e) {
       return this.fail(`登出失败${e}`);
     }
@@ -138,7 +137,7 @@ module.exports = class extends Base {
           return this.fail('工号已经存在');
         }
         const salt = 'weekly';
-        let password = think.md5('88886666');
+        let password = think.md5(salt + '88886666');
         let dateTime = new Date();
         let create_time =
           dateTime.getFullYear() +

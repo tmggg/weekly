@@ -14,6 +14,7 @@ module.exports = class extends Base {
       return this.fail(e);
     }
   }
+
   /*新增公司*/
   async addUpdateCompanyAction() {
     try {

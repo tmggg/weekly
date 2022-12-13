@@ -2,28 +2,24 @@
 // 引入vue和axios
 import Vue from "vue";
 import axios from "axios";
-import router from '../router'
+import router from "../router";
 
-import {
-    serveUrl,
-    getConfig,
-    postConfig,
-  } from "./config";
+import { serveUrl, getConfig, postConfig } from "./config";
 
 // 继承vue的原型方法
 Vue.prototype.axios = axios;
 const service = axios.create({
-  baseURL: '/weekly_node',
+  baseURL: "/weekly_node",
   // baseURL: '/',
   timeout: 10000
-})
+});
 
 // 开发环境调试用户信息
 service.interceptors.request.use(config => {
-    if (process.env.NODE_ENV === 'development') {
-      config.headers["username"] = "test";
-    }
-    return config;
+  if (process.env.NODE_ENV === "development") {
+    config.headers["username"] = "test";
+  }
+  return config;
 });
 
 service.interceptors.response.use(
@@ -72,7 +68,10 @@ export default {
     return service.post("/home/department/getDepartmentMemberList", params);
   },
   getDepartmentMemberListNoPage: params => {
-    return service.post("/home/department/getDepartmentMemberListNoPage", params);
+    return service.post(
+      "/home/department/getDepartmentMemberListNoPage",
+      params
+    );
   },
   getUnDepartmentMemberList: params => {
     return service.post("/home/department/getUnDepartmentMemberList", params);
@@ -119,7 +118,7 @@ export default {
   /*登入和登出日志*/
   getLoginLog: params => {
     return service.post("/home/log/getLoginLog", params);
-  },
+  }
   /**
    * API demo
    *
@@ -132,5 +131,4 @@ export default {
    *     return axios.post('xxxx.do', params, postConfig)
    * }
    */
-
-}
+};
